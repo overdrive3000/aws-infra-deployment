@@ -1,0 +1,79 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "Master cloudformation template, this one use nested templates to create the whole stack",
+  "Parameters": {
+    "VPCCFTemplateURL": {
+      "Description": "URL Template to create VPC the stack",
+      "AllowedPattern": "^https?://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]",
+      "ConstraintDescription": "must be a valid URL like https://s3-us-west-2.amazonaws.com/bucketname/file.json",
+      "Type": "String"
+    },
+    "EC2CFTemplateURL": {
+      "Description": "URL Template to create instances stack",
+      "AllowedPattern": "^https?://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]",
+      "ConstraintDescription": "must be a valid URL like https://s3-us-west-2.amazonaws.com/bucketname/file.json",
+      "Type": "String"
+    },
+    "SubnetCIDR01": {
+      "AllowedPattern": "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})",
+      "ConstraintDescription": "must be a valid IP CIDR range of the form x.x.x.x/x.",
+      "Default": "172.17.1.0/24",
+      "Description": "IP Address range for the Public Subnet 01",
+      "MaxLength": "18",
+      "MinLength": "9",
+      "Type": "String"
+    },
+    "SubnetCIDR02": {
+      "AllowedPattern": "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})",
+      "ConstraintDescription": "must be a valid IP CIDR range of the form x.x.x.x/x.",
+      "Default": "172.17.2.0/24",
+      "Description": "IP Address range for the Public Subnet 02",
+      "MaxLength": "18",
+      "MinLength": "9",
+      "Type": "String"
+    },
+    "VPCCIDR": {
+      "AllowedPattern": "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})",
+      "ConstraintDescription": "must be a valid IP CIDR range of the form x.x.x.x/x.",
+      "Default": "172.17.0.0/16",
+      "Description": "IP Address range for the VPC",
+      "MaxLength": "18",
+      "MinLength": "9",
+      "Type": "String"
+    }
+  },
+  "Resources": {
+    "VPCStack": {
+      "Type": "AWS::CloudFormation::Stack",
+      "Properties": {
+        "TemplateURL": { "Ref": "VPCCFTemplateURL" },
+        "Parameters": {
+          "SubnetCIDR01": { "Ref": "SubnetCIDR01" },
+          "SubnetCIDR02": { "Ref": "SubnetCIDR02" },
+          "VPCCIDR": { "Ref": "VPCCIDR" }
+        },
+        "TimeoutInMinutes": "60"
+      }
+    },
+    "EC2Stack": {
+      "Type": "AWS::CloudFormation::Stack",
+      "Properties": {
+        "TemplateURL": { "Ref": "EC2CFTemplateURL" },
+        "Parameters": {
+          "SubnetID": { "Fn::GetAtt": ["VPCStack", "Outputs.Subnet01"] },
+          "SGId01": { "Fn::GetAtt": ["VPCStack", "Outputs.MySQLSG"] },
+          "SGId02": { "Fn::GetAtt": ["VPCStack", "Outputs.RDPSG"] }
+        },
+        "TimeoutInMinutes": "60"
+      }
+    }
+  },
+  "Outputs": {
+    "VPCRef": {
+      "Value": { "Ref": "VPCStack" }
+    },
+    "EC2Ref": {
+      "Value": { "Ref": "EC2Stack" }
+    }
+  }
+}

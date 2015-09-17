@@ -4,6 +4,14 @@
         "SubnetID": {
             "Description": "VPC Id where the instance must be created",
             "Type": "String"
+        },
+        "SGId01":{
+          "Description": "Security Group ID 01",
+          "Type": "String"
+        },
+        "SGId02":{
+          "Description": "Security Group ID 02",
+          "Type": "String"
         }
     },
     "Mappings": {
@@ -72,7 +80,7 @@
             "Type": "AWS::EC2::Instance",
             "Properties": {
                 "InstanceType": "t2.micro",
-                "SecurityGroupIds": ["sg-77981413", "sg-67981403"],
+                "SecurityGroupIds": [{ "Ref": "SGId01" }, { "Ref": "SGId02" }],
                 "ImageId" : "ami-d5c5d1e5",
                 "SubnetId": {"Ref": "SubnetID"}
             }
