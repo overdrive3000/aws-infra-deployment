@@ -292,6 +292,18 @@
             "Value": {
                 "Ref": "VPC"
             }
+        },
+        "MySQLSG": {
+          "Description": "MySQLSecurityGroup ID",
+          "Value": {
+            "Ref": "MySQLSecurityGroup"
+          } 
+        },
+        "RDPSG": {
+          "Description": "RDPSecurityGroup ID",
+          "Value": {
+            "Ref": "RDPSecurityGroup"
+          }
         }
     }
 }
