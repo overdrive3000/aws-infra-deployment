@@ -97,7 +97,7 @@
         },
         "InstanceARN": {
             "Description": "Instance ARN",
-            "Value": {"Fn::Join":["",["arn:aws:ec2:us-west-2:",{ "Ref": "AWS::AccountId" },"instance/",{ "Ref" : "EC2Instance" } ] ] }
+            "Value": {"Fn::Join":["",["arn:aws:ec2:us-west-2:",{ "Ref": "AWS::AccountId" },":instance/",{ "Ref" : "EC2Instance" } ] ] }
         }
     }
 }
