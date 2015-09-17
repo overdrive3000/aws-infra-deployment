@@ -58,6 +58,7 @@
                 "CidrBlock": {
                     "Ref": "SubnetCIDR01"
                 },
+                "MapPublicIpOnLaunch": "true",
                 "Tags": [
                     {
                         "Key": "Application",
@@ -81,6 +82,7 @@
                 "CidrBlock": {
                     "Ref": "SubnetCIDR02"
                 },
+                "MapPublicIpOnLaunch": "true",
                 "Tags": [
                     {
                         "Key": "Application",
