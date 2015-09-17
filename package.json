@@ -1,0 +1,24 @@
+{
+  "name": "aws_node",
+  "version": "1.0.0",
+  "description": "aws cloudformation api",
+  "main": "index.js",
+  "scripts": {
+    "list-stack": "babel-node --eval \"require('./tasks/list_stack')().catch(err => console.log(err.stack))\"",
+    "describe-stack": "babel-node --eval \"require('./tasks/describe_stack')().catch(err => console.log(err.stack))\"",
+    "create-stack": "babel-node --eval \"require('./tasks/create_stack')().catch(err => console.log(err.stack))\""
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "aws-sdk": "^2.2.2",
+    "babel": "^5.8.23",
+    "node-csv": "^0.1.2",
+    "underscore": "^1.8.3"
+  },
+  "devDependencies": {
+    "babel-core": "^5.8.24",
+    "babel-loader": "^5.3.2",
+    "webpack": "^1.12.2"
+  }
+}
