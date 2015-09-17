@@ -1,0 +1,104 @@
+{
+    "Description": "AWS CloudFormation IAM Stack Template: This template performs the creation of IAM User/Group.",
+    "Parameters": {
+        "Password01": {
+            "NoEcho": "true",
+            "Type": "String",
+            "Description": "Password for User01",
+            "MinLength": "8",
+            "MaxLength": "41"
+        },
+        "Password02": {
+            "NoEcho": "true",
+            "Type": "String",
+            "Description": "Password for User02",
+            "MinLength": "8",
+            "MaxLength": "41"
+        },
+        "Password03": {
+            "NoEcho": "true",
+            "Type": "String",
+            "Description": "Password for User03",
+            "MinLength": "8",
+            "MaxLength": "41"
+        }
+    },
+    "Resources": {
+        "User01": {
+            "Type": "AWS::IAM::User",
+            "Properties": {
+                "LoginProfile": { "Password": {"Ref": "Password01"}  }
+            }
+        },
+        "User02": {
+            "Type": "AWS::IAM::User",
+            "Properties": {
+                "LoginProfile": { "Password": {"Ref": "Password02"}  }
+            }
+        },
+        "User03": {
+            "Type": "AWS::IAM::User",
+            "Properties": {
+                "LoginProfile": { "Password": {"Ref": "Password03"}  }
+            }
+        },
+        "NonPriviledges": {
+            "Type": "AWS::IAM::Group"
+        },
+        "Users": {
+            "Type": "AWS::IAM::UserToGroupAddition",
+            "Properties": {
+                "GroupName": {"Ref": "NonPriviledges"},
+                "Users": [
+                    {"Ref": "User01"},
+                    {"Ref": "User02"},
+                    {"Ref": "User03"}
+                ]
+            }
+        },
+        "Key01": {
+            "Type": "AWS::IAM::AccessKey",
+            "Properties": {
+                "UserName": {"Ref": "User01"}
+            }
+        },
+        "Key02": {
+            "Type": "AWS::IAM::AccessKey",
+            "Properties": {
+                "UserName": {"Ref": "User02"}
+            }
+        },
+        "Key03": {
+            "Type": "AWS::IAM::AccessKey",
+            "Properties": {
+                "UserName": {"Ref": "User03"}
+            }
+        }
+    },
+    "Outputs": {
+        "AccessKey01": {
+            "Value": {"Ref": "Key01"},
+            "Description": "AWSAccessKeyID for User01"
+        },
+        "SecretKey01": {
+            "Value": {"Fn::GetAtt": ["Key01", "SecretAccessKey"]},
+            "Description": "AWSSecretKey of User01"
+        },
+        "AccessKey02": {
+            "Value": {"Ref": "Key02"},
+            "Description": "AWSAccessKeyID for User02"
+        },
+        "SecretKey02": {
+            "Value": {"Fn::GetAtt": ["Key02", "SecretAccessKey"]},
+            "Description": "AWSSecretKey of User02"
+        },
+        "AccessKey03": {
+            "Value": {"Ref": "Key03"},
+            "Description": "AWSAccessKeyID for User03"
+        },
+        "SecretKey03": {
+            "Value": {"Fn::GetAtt": ["Key03", "SecretAccessKey"]},
+            "Description": "AWSSecretKey of User03"
+        }
+    }
+}
