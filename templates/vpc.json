@@ -6,7 +6,7 @@
             "AllowedPattern": "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})",
             "ConstraintDescription": "must be a valid IP CIDR range of the form x.x.x.x/x.",
             "Default": "172.17.1.0/24",
-            "Description": "IP Address range for the VPN connected Subnet",
+            "Description": "IP Address range for the VPC",
             "MaxLength": "18",
             "MinLength": "9",
             "Type": "String"
@@ -15,7 +15,7 @@
             "AllowedPattern": "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})",
             "ConstraintDescription": "must be a valid IP CIDR range of the form x.x.x.x/x.",
             "Default": "172.17.2.0/24",
-            "Description": "IP Address range for the VPN connected Subnet",
+            "Description": "IP Address range for the Public Subnet 01",
             "MaxLength": "18",
             "MinLength": "9",
             "Type": "String"
@@ -24,7 +24,7 @@
             "AllowedPattern": "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})",
             "ConstraintDescription": "must be a valid IP CIDR range of the form x.x.x.x/x.",
             "Default": "172.17.0.0/16",
-            "Description": "IP Address range for the VPN connected VPC",
+            "Description": "IP Address range for the Public Subnet 02",
             "MaxLength": "18",
             "MinLength": "9",
             "Type": "String"
