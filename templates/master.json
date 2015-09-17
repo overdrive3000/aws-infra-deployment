@@ -14,6 +14,12 @@
       "ConstraintDescription": "must be a valid URL like https://s3-us-west-2.amazonaws.com/bucketname/file.json",
       "Type": "String"
     },
+    "UsersCFTemplateURL": {
+      "Description": "URL Template to create Users and Roles",
+      "AllowedPattern": "^https?://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]",
+      "ConstraintDescription": "must be a valid URL like https://s3-us-west-2.amazonaws.com/bucketname/file.json",
+      "Type": "String"
+    },
     "SubnetCIDR01": {
       "AllowedPattern": "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})",
       "ConstraintDescription": "must be a valid IP CIDR range of the form x.x.x.x/x.",
@@ -49,6 +55,27 @@
     "KeyPairName": {
       "Description": "Key pair to use in the instances",
       "Type": "String"
+    },
+    "Password01": {
+      "NoEcho": "true",
+      "Type": "String",
+      "Description": "Password for User01",
+      "MinLength": "8",
+      "MaxLength": "41"
+    },
+    "Password02": {
+      "NoEcho": "true",
+      "Type": "String",
+      "Description": "Password for User02",
+      "MinLength": "8",
+      "MaxLength": "41"
+    },
+    "Password03": {
+      "NoEcho": "true",
+      "Type": "String",
+      "Description": "Password for User03",
+      "MinLength": "8",
+      "MaxLength": "41"
     }
   },
   "Resources": {
@@ -76,6 +103,20 @@
           "KeyPairName": { "Ref": "KeyPairName" }
         },
         "TimeoutInMinutes": "60"
+      }
+    },
+    "UserStack": {
+      "Type": "AWS::Cloudformation::Stack",
+      "Properties": {
+        "TemplateURL": { "Ref": "UsersCFTemplateURL" },
+        "Parameters": {
+          "Password01": { "Ref": "Password01" },
+          "Password02": { "Ref": "Password02" },
+          "Password03": { "Ref": "Password03" },
+          "Windows01ARN": { "Fn::GetAtt": ["EC2Stack", "Ouputs.Windows01ARN"] },
+          "Windows02ARN": { "Fn::GetAtt": ["EC2Stack", "Ouputs.Windows02ARN"] },
+          "Windows03ARN": { "Fn::GetAtt": ["EC2Stack", "Ouputs.Windows03ARN"] }
+        }
       }
     }
   },
