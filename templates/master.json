@@ -40,6 +40,15 @@
       "MaxLength": "18",
       "MinLength": "9",
       "Type": "String"
+    },
+    "WindowsAMIId": {
+      "Description": "Windows AMI Id",
+      "Default": "ami-4dbcb67d",
+      "Type": "String"
+    },
+    "KeyPairName": {
+      "Description": "Key pair to use in the instances",
+      "Type": "String"
     }
   },
   "Resources": {
@@ -62,7 +71,9 @@
         "Parameters": {
           "SubnetID": { "Fn::GetAtt": ["VPCStack", "Outputs.Subnet01"] },
           "SGId01": { "Fn::GetAtt": ["VPCStack", "Outputs.MySQLSG"] },
-          "SGId02": { "Fn::GetAtt": ["VPCStack", "Outputs.RDPSG"] }
+          "SGId02": { "Fn::GetAtt": ["VPCStack", "Outputs.RDPSG"] },
+          "WindowsAMIId": { "Ref": "WindowsAMIId" },
+          "KeyPairName": { "Ref": "KeyPairName" }
         },
         "TimeoutInMinutes": "60"
       }
