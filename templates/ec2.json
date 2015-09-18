@@ -4,6 +4,30 @@
         "SubnetID": {
             "Description": "VPC Id where the instance must be created",
             "Type": "String"
+        },
+        "SGId01":{
+          "Description": "Security Group ID 01",
+          "Type": "String"
+        },
+        "SGId02":{
+          "Description": "Security Group ID 02",
+          "Type": "String"
+        },
+        "WindowsAMIId": {
+          "Description": "Windows AMI Id",
+          "Default": "ami-4dbcb67d",
+          "Type": "String"
+        },
+        "KeyPairName": {
+          "Description": "Key pair to use in the instances",
+          "Type": "String"
+        },
+        "OperatorEMail": {
+          "Description": "EMail address to notify CPU high workload",
+          "Type": "String",
+          "AllowedPattern": "([a-zA-Z0-9_\\-\\.]+)@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.)|(([a-zA-Z0-9\\-]+\\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\\]?)",
+          "ConstraintDescription": "must be a valid email address.",
+          "Default": "linuxven@gmail.com"
         }
     },
     "Mappings": {
@@ -68,28 +92,173 @@
         }
     },
     "Resources": {
-        "EC2Instance": {
-            "Type": "AWS::EC2::Instance",
-            "Properties": {
-                "InstanceType": "t2.micro",
-                "SecurityGroupIds": ["sg-77981413", "sg-67981403"],
-                "ImageId" : "ami-d5c5d1e5",
-                "SubnetId": {"Ref": "SubnetID"}
-            }
+      "NotificationTopic": {
+        "Type": "AWS::SNS::Topic",
+        "Properties": {
+          "Subscription": [ { "Endpoint": { "Ref": "OperatorEMail" }, "Protocol": "email" } ]
         }
+      },
+      "WindowsProfile": {
+        "Type": "AWS::IAM::InstanceProfile",
+        "Properties": {
+          "Path": "/",
+          "Roles": ["s3-role"]
+        }
+      },
+      "Windows01": {
+        "Type": "AWS::EC2::Instance",
+        "Properties": {
+          "InstanceType": "t2.micro",
+          "IamInstanceProfile": { "Ref": "WindowsProfile" },
+          "SecurityGroupIds": [{ "Ref": "SGId02" }],
+          "ImageId" : { "Ref": "WindowsAMIId" },
+          "SubnetId": {"Ref": "SubnetID"},
+          "KeyName": { "Ref": "KeyPairName" },
+          "UserData": {
+            "Fn::Base64": {
+              "Fn::Join": [ "", [
+                  "<powershell>Read-S3Object -BucketName winfiles -Key CPUSTRES.zip -File c:\\CPUSTRES.zip</powershell>"
+                ]
+              ]
+            }
+          }
+        }
+      },
+      "Windows02": {
+        "Type": "AWS::EC2::Instance",
+        "Properties": {
+          "InstanceType": "t2.micro",
+          "IamInstanceProfile": { "Ref": "WindowsProfile" },
+          "SecurityGroupIds": [{ "Ref": "SGId02" }],
+          "ImageId" : { "Ref": "WindowsAMIId" },
+          "SubnetId": {"Ref": "SubnetID"},
+          "KeyName": { "Ref": "KeyPairName" },
+          "UserData": {
+            "Fn::Base64": {
+              "Fn::Join": [ "", [
+                  "<powershell>Read-S3Object -BucketName winfiles -Key CPUSTRES.zip -File c:\\CPUSTRES.zip</powershell>"
+                ]
+              ]
+            }
+          }
+        }
+      },
+      "Windows03": {
+        "Type": "AWS::EC2::Instance",
+        "Properties": {
+          "InstanceType": "t2.micro",
+          "IamInstanceProfile": { "Ref": "WindowsProfile" },
+          "SecurityGroupIds": [{ "Ref": "SGId02" }],
+          "ImageId" : { "Ref": "WindowsAMIId" },
+          "SubnetId": {"Ref": "SubnetID"},
+          "KeyName": { "Ref": "KeyPairName" },
+          "UserData": {
+            "Fn::Base64": {
+              "Fn::Join": [ "", [
+                  "<powershell>Read-S3Object -BucketName winfiles -Key CPUSTRES.zip -File c:\\CPUSTRES.zip</powershell>"
+                ]
+              ]
+            }
+          }
+        }
+      },
+      "CPUAlarmHighWindows01": {
+        "Type": "AWS::CloudWatch::Alarm",
+        "Properties": {
+          "AlarmDescription": "Sent notification if CPU > 85% for 5 minutes",
+          "MetricName": "CPUUtilization",
+          "Namespace": "AWS/EC2",
+          "Statistic": "Average",
+          "Period": "300",
+          "EvaluationPeriods": "1",
+          "Threshold": "85",
+          "AlarmActions": [ { "Ref": "NotificationTopic" } ],
+          "Dimensions": [
+            {
+              "Name": "InstanceId",
+              "Value": { "Ref": "Windows01" } 
+            }
+          ],
+          "ComparisonOperator": "GreaterThanThreshold"
+        }
+      },
+      "CPUAlarmHighWindows02": {
+        "Type": "AWS::CloudWatch::Alarm",
+        "Properties": {
+          "AlarmDescription": "Sent notification if CPU > 85% for 5 minutes",
+          "MetricName": "CPUUtilization",
+          "Namespace": "AWS/EC2",
+          "Statistic": "Average",
+          "Period": "300",
+          "EvaluationPeriods": "1",
+          "Threshold": "85",
+          "AlarmActions": [ { "Ref": "NotificationTopic" } ],
+          "Dimensions": [
+            {
+              "Name": "InstanceId",
+              "Value": { "Ref": "Windows02" } 
+            }
+          ],
+          "ComparisonOperator": "GreaterThanThreshold"
+        }
+      },
+      "CPUAlarmHighWindows03": {
+        "Type": "AWS::CloudWatch::Alarm",
+        "Properties": {
+          "AlarmDescription": "Sent notification if CPU > 85% for 5 minutes",
+          "MetricName": "CPUUtilization",
+          "Namespace": "AWS/EC2",
+          "Statistic": "Average",
+          "Period": "300",
+          "EvaluationPeriods": "1",
+          "Threshold": "85",
+          "AlarmActions": [ { "Ref": "NotificationTopic" } ],
+          "Dimensions": [
+            {
+              "Name": "InstanceId",
+              "Value": { "Ref": "Windows03" } 
+            }
+          ],
+          "ComparisonOperator": "GreaterThanThreshold"
+        }
+      }
     },
     "Outputs": {
-        "InstanceId": {
+        "Windows01Id": {
             "Description": "InstanceId of the newly created EC2 instance",
-            "Value" : { "Ref" : "EC2Instance" }
+            "Value" : { "Ref" : "Windows01" }
         },
-        "InstabceIPAddress": {
+        "Windows01IPAddress": {
             "Description" : "IP address of the newly created EC2 instance",
-            "Value": {"Fn::GetAtt": ["EC2Instance", "PublicIp"]}
+            "Value": {"Fn::GetAtt": ["Windows01", "PublicIp"]}
         },
-        "InstanceARN": {
+        "Windows01ARN": {
             "Description": "Instance ARN",
-            "Value": {"Fn::Join":["",["arn:aws:ec2:us-west-2:",{ "Ref": "AWS::AccountId" },"instance/",{ "Ref" : "EC2Instance" } ] ] }
+            "Value": {"Fn::Join":["",["arn:aws:ec2:us-west-2:",{ "Ref": "AWS::AccountId" },":instance/",{ "Ref" : "Windows01" } ] ] }
+        },
+        "Windows02Id": {
+            "Description": "InstanceId of the newly created EC2 instance",
+            "Value" : { "Ref" : "Windows02" }
+        },
+        "Windows02IPAddress": {
+            "Description" : "IP address of the newly created EC2 instance",
+            "Value": {"Fn::GetAtt": ["Windows02", "PublicIp"]}
+        },
+        "Windows02ARN": {
+            "Description": "Instance ARN",
+            "Value": {"Fn::Join":["",["arn:aws:ec2:us-west-2:",{ "Ref": "AWS::AccountId" },":instance/",{ "Ref" : "Windows02" } ] ] }
+        },
+        "Windows03Id": {
+            "Description": "InstanceId of the newly created EC2 instance",
+            "Value" : { "Ref" : "Windows03" }
+        },
+        "Windows03IPAddress": {
+            "Description" : "IP address of the newly created EC2 instance",
+            "Value": {"Fn::GetAtt": ["Windows03", "PublicIp"]}
+        },
+        "Windows03ARN": {
+            "Description": "Instance ARN",
+            "Value": {"Fn::Join":["",["arn:aws:ec2:us-west-2:",{ "Ref": "AWS::AccountId" },":instance/",{ "Ref" : "Windows03" } ] ] }
         }
     }
 }

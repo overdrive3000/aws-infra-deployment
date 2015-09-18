@@ -21,6 +21,18 @@
             "Description": "Password for User03",
             "MinLength": "8",
             "MaxLength": "41"
+        },
+        "Windows01ARN": {
+          "Description": "ARN Instace to be assigned to User01",
+          "Type": "String"
+        },
+        "Windows02ARN": {
+          "Description": "ARN Instace to be assigned to User02",
+          "Type": "String"
+        },
+        "Windows03ARN": {
+          "Description": "ARN Instace to be assigned to User03",
+          "Type": "String"
         }
     },
     "Resources": {
@@ -55,6 +67,96 @@
                     {"Ref": "User03"}
                 ]
             }
+        },
+        "User01Policy": {
+          "Type": "AWS::IAM::Policy",
+          "Properties": {
+            "PolicyName": "User01Policy",
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "ec2:StartInstances",
+                    "ec2:StopInstances"
+                  ],
+                  "Resource": [
+                    { "Ref": "Windows01ARN" }
+                 ]
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "ec2:DescribeInstances"
+                  ],
+                  "Resource": [
+                    "*"
+                  ]
+                }
+              ]
+            },
+            "Users": [ { "Ref": "User01" } ]
+          }
+        },
+        "User02Policy": {
+          "Type": "AWS::IAM::Policy",
+          "Properties": {
+            "PolicyName": "User02Policy",
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "ec2:StartInstances",
+                    "ec2:StopInstances"
+                  ],
+                  "Resource": [
+                    { "Ref": "Windows02ARN" }
+                 ]
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "ec2:DescribeInstances"
+                  ],
+                  "Resource": [
+                    "*"
+                  ]
+                }
+              ]
+            },
+            "Users": [ { "Ref": "User02" } ]
+          }
+        },
+        "User03Policy": {
+          "Type": "AWS::IAM::Policy",
+          "Properties": {
+            "PolicyName": "User03Policy",
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "ec2:StartInstances",
+                    "ec2:StopInstances"
+                  ],
+                  "Resource": [
+                    { "Ref": "Windows03ARN" }
+                 ]
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "ec2:DescribeInstances"
+                  ],
+                  "Resource": [
+                    "*"
+                  ]
+                }
+              ]
+            },
+            "Users": [ { "Ref": "User03" } ]
+          }
         },
         "Key01": {
             "Type": "AWS::IAM::AccessKey",
