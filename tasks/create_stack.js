@@ -1,5 +1,5 @@
 import { CloudFormation } from 'aws-sdk';
-import config from './aws_config';
+import config from '../config/aws_config';
 import settings from '../config/settings';
 import _ from 'underscore';
 

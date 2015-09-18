@@ -5,6 +5,10 @@
   "main": "index.js",
   "scripts": {
     "provision": "babel-node --eval \"require('./tasks/provision')().catch(err => console.log(err.stack))\"",
+    "create-db": "babel-node --eval \"require('./tasks/create_rds')().catch(err => console.log(err.stack))\"",
+    "describe-db": "babel-node --eval \"require('./tasks/describe_rds').default().catch(err => console.log(err.stack))\"",
+    "geturl-endpoint": "babel-node --eval \"require('./tasks/describe_rds').getEndpointURL().catch(err => console.log(err.stack))\"",
+    "getport-endpoint": "babel-node --eval \"require('./tasks/describe_rds').getEndpointPort().catch(err => console.log(err.stack))\"",
     "upload-templates": "babel-node --eval \"require('./tasks/upload_templates')().catch(err => console.log(err.stack))\"",
     "upload-winfiles": "babel-node --eval \"require('./tasks/upload_winfiles')().catch(err => console.log(err.stack))\"",
     "describe-stack": "babel-node --eval \"require('./tasks/describe_stack')().catch(err => console.log(err.stack))\"",

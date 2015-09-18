@@ -1,5 +1,5 @@
 import settings from '../config/settings';
-import config from './aws_config';
+import config from '../config/aws_config';
 import { S3 } from 'aws-sdk';
 import _ from 'underscore';
 import fs from 'fs';

@@ -8,6 +8,8 @@ export default async () => {
   let locTemplates = await uploadTemplates();
   uploadWinfiles();
   let stack = await createStack(locTemplates.Location);
-  await checkStatus(stack.StackId);
+
+  // Is not working
+  // await checkStatus(stack.StackId);
 
 }

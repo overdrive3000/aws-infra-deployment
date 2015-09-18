@@ -1,5 +1,5 @@
 import { CloudFormation } from 'aws-sdk';
-import config from './aws_config';
+import config from '../config/aws_config';
 import _ from 'underscore';
 
 export default () => new Promise((resolve, reject) => {
