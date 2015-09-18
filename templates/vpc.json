@@ -73,7 +73,8 @@
                 ],
                 "VpcId": {
                     "Ref": "VPC"
-                }
+                },
+                "AvailabilityZone": "us-west-2a"
             },
             "Type": "AWS::EC2::Subnet"
         },
@@ -97,7 +98,8 @@
                 ],
                 "VpcId": {
                     "Ref": "VPC"
-                }
+                },
+                "AvailabilityZone": "us-west-2c"
             },
             "Type": "AWS::EC2::Subnet"
         },
