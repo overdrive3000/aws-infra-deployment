@@ -74,7 +74,7 @@
                 "VpcId": {
                     "Ref": "VPC"
                 },
-                "AvailabilityZone": "us-west-2a"
+                "AvailabilityZone": { "Fn::Select" : [ "0", { "Fn::GetAZs" : "" } ] }
             },
             "Type": "AWS::EC2::Subnet"
         },
@@ -99,7 +99,7 @@
                 "VpcId": {
                     "Ref": "VPC"
                 },
-                "AvailabilityZone": "us-west-2c"
+                "AvailabilityZone": { "Fn::Select" : [ "1", { "Fn::GetAZs" : "" } ] }
             },
             "Type": "AWS::EC2::Subnet"
         },
