@@ -17,7 +17,8 @@
     "upload-bundle": "babel-node --eval \"require('./tasks/upload_bundle')().catch(err => console.log(err.stack))\"",
     "create-eb-application": "babel-node --eval \"require('./tasks/create_eb_app')().catch(err => console.log(err.stack))\"",
     "create-eb-version": "babel-node --eval \"require('./tasks/create_eb_app_ver')().catch(err => console.log(err.stack))\"",
-    "create-eb-environment": "babel-node --eval \"require('./tasks/create_eb_env')().catch(err => console.log(err.stack))\""
+    "create-eb-environment": "babel-node --eval \"require('./tasks/create_eb_env')().catch(err => console.log(err.stack))\"",
+    "provision-task2": "babel-node --eval \"require('./tasks/provision_task2')().catch(err => console.log(err.stack))\""
   },
   "author": "Juan Manuel Mesa",
   "license": "ISC",

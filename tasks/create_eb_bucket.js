@@ -4,6 +4,7 @@ import { S3 } from 'aws-sdk';
 import _ from 'underscore';
 
 export default () => new Promise((resolve, reject) => {
+  console.log("Create EB Bucket");
   const s3 = new S3();
   
   let params = {
@@ -16,6 +17,7 @@ export default () => new Promise((resolve, reject) => {
       console.log(err, err.stack);
       reject(err);
     } else {
+      console.log("SUCESS: Bucket created");
       resolve(data);
     }
   });

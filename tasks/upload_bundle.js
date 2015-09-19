@@ -5,7 +5,7 @@ import fs from 'fs';
 import { Repository } from 'git-cli';
 import archiver from 'archiver';
 
-export default () => new Promise((resolve, reject) => {
+export default (bucket) => new Promise((resolve, reject) => {
   
   const appPath = "/tmp/myitcrm";
 
@@ -17,12 +17,13 @@ export default () => new Promise((resolve, reject) => {
     } else {
       // Create conf.php file
       fs.createReadStream(`${appPath}/conf-default.php`).pipe(fs.createWriteStream(`${appPath}/conf.php`));
+      console.log("SUCCESS: MyITCRM conf.php created");
       const output = fs.createWriteStream("/tmp/app.zip");
       const zip = archiver.create("zip");
 
       output.on('finish', function() {
         console.log(zip.pointer() + ' total bytes');
-        console.log('archiver has been finalized and the output file descriptor has closed.');
+        console.log('SUCESS: archiver has been finalized and the output file descriptor has closed.');
         const s3 = new S3();
         fs.readFile(("/tmp/app.zip"), function(err, data) {
           console.log("Reading file app.zip...");
@@ -32,7 +33,7 @@ export default () => new Promise((resolve, reject) => {
           }
           var base64data = new Buffer(data, 'binary');
           let params = {
-            Bucket: "myitcrm-1442639250876",
+            Bucket: bucket,
             Key: "app.zip",
             Body: base64data
           };
@@ -41,6 +42,7 @@ export default () => new Promise((resolve, reject) => {
               console.log(err, err.stack);
               reject(err);
             } else {
+              console.log("SUCESS: MyITCRM uploaded to S3");
               resolve(data);
             }
           });
@@ -55,6 +57,7 @@ export default () => new Promise((resolve, reject) => {
       ]);
       zip.finalize();
     }
+    console.log("SUCESS: MyITCRM app cloned");
   });
 
 });
