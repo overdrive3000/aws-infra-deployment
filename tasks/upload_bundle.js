@@ -1,9 +1,9 @@
 import settings from '../config/task2_settings';
 import config from '../config/aws_config';
 import { S3 } from 'aws-sdk';
-import _ from 'underscore';
 import fs from 'fs';
 import { Repository } from 'git-cli';
+import archiver from 'archiver';
 
 export default () => new Promise((resolve, reject) => {
   
@@ -17,6 +17,22 @@ export default () => new Promise((resolve, reject) => {
     } else {
       // Create conf.php file
       fs.createReadStream(`${appPath}/conf-default.php`).pipe(fs.createWriteStream(`${appPath}/conf.php`));
+      const output = fs.createWriteStream("/tmp/app.zip");
+      const zip = archiver.create("zip");
+
+      output.on('close', function() {
+        console.log(zip.pointer() + ' total bytes');
+        console.log('archiver has been finalized and the output file descriptor has closed.');
+        resolve();
+      });
+      zip.on('error', function(err) {
+        reject(err);
+      });
+      zip.pipe(output);
+      zip.bulk([
+        { expand: true, cwd: appPath, src: ['**/*'] }
+      ]);
+      zip.finalize();
     }
   });
 
