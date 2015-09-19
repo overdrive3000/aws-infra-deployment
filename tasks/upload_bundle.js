@@ -20,10 +20,31 @@ export default () => new Promise((resolve, reject) => {
       const output = fs.createWriteStream("/tmp/app.zip");
       const zip = archiver.create("zip");
 
-      output.on('close', function() {
+      output.on('finish', function() {
         console.log(zip.pointer() + ' total bytes');
         console.log('archiver has been finalized and the output file descriptor has closed.');
-        resolve();
+        const s3 = new S3();
+        fs.readFile(("/tmp/app.zip"), function(err, data) {
+          console.log("Reading file app.zip...");
+          if (err) { 
+            console.log(err, err.stack);
+            reject(err); 
+          }
+          var base64data = new Buffer(data, 'binary');
+          let params = {
+            Bucket: "myitcrm-1442639250876",
+            Key: "app.zip",
+            Body: base64data
+          };
+          s3.putObject(params, function(err, data){
+            if (err) {
+              console.log(err, err.stack);
+              reject(err);
+            } else {
+              resolve(data);
+            }
+          });
+        });
       });
       zip.on('error', function(err) {
         reject(err);
