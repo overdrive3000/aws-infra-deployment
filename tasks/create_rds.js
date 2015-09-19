@@ -29,9 +29,9 @@ export default (securitygroup) => new Promise((resolve, reject) => {
       const ec2 = new EC2();
       let params2 = {
         CidrIp: "0.0.0.0/0",
-        FromPort: "3389",
+        FromPort: "3306",
         GroupId: securitygroup,
-        ToPort: "3389",
+        ToPort: "3306",
         IpProtocol: "tcp"
       };
       ec2.authorizeSecurityGroupIngress(params2, function(err, data){
