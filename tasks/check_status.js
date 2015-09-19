@@ -13,25 +13,21 @@ export default (stackID) => new Promise((resolve, reject) => {
     StackName: stackID 
   }
 
-  async.doUntil( 
-    function() {cloudformation.describeStacks(params, function(err, data){
-      if (err) {
-        console.log(err, err.stack);
-        reject(err);
-      } else {
-        status = data.Stacks[0].StackStatus;
-        console.log(status);
-      }
-    })},
-    function() {return (status !== "CREATE_COMPLETE"); },
-    function(err){
-      if (err) {
-        console.log(err, err.stack)
-        reject(err);
-      } else {
-        console.log("BLAAA");
-        resolve();
-      }
-    }
-  )
+  let interval = setInterval(
+    () => {
+        cloudformation.describeStacks(params, function(err, data){
+          if (err) {
+            console.log(err, err.stack);
+            reject(err);
+          } else {
+            status = data.Stacks[0].StackStatus;
+            console.log(status);
+            if (status === "CREATE_COMPLETE") {
+              console.log("Check complete!");
+              resolve();
+              clearInterval(interval);
+            }
+          }
+        });
+    }, 60000);
 });
