@@ -1,0 +1,39 @@
+{
+  "name": "aws_node",
+  "version": "1.0.0",
+  "description": "aws api and nodejs",
+  "main": "index.js",
+  "scripts": {
+    "provision": "babel-node --eval \"require('./tasks/provision')().catch(err => console.log(err.stack))\"",
+    "create-db": "babel-node --eval \"require('./tasks/create_rds')().catch(err => console.log(err.stack))\"",
+    "describe-db": "babel-node --eval \"require('./tasks/describe_rds').default().catch(err => console.log(err.stack))\"",
+    "geturl-endpoint": "babel-node --eval \"require('./tasks/describe_rds').getEndpointURL().catch(err => console.log(err.stack))\"",
+    "getport-endpoint": "babel-node --eval \"require('./tasks/describe_rds').getEndpointPort().catch(err => console.log(err.stack))\"",
+    "upload-templates": "babel-node --eval \"require('./tasks/upload_templates')().catch(err => console.log(err.stack))\"",
+    "upload-winfiles": "babel-node --eval \"require('./tasks/upload_winfiles')().catch(err => console.log(err.stack))\"",
+    "describe-stack": "babel-node --eval \"require('./tasks/describe_stack')().catch(err => console.log(err.stack))\"",
+    "create-stack": "babel-node --eval \"require('./tasks/create_stack')().catch(err => console.log(err.stack))\"",
+    "create-eb-bucket": "babel-node --eval \"require('./tasks/create_eb_bucket')().catch(err => console.log(err.stack))\"",
+    "upload-bundle": "babel-node --eval \"require('./tasks/upload_bundle')().catch(err => console.log(err.stack))\"",
+    "create-eb-application": "babel-node --eval \"require('./tasks/create_eb_app')().catch(err => console.log(err.stack))\"",
+    "create-eb-version": "babel-node --eval \"require('./tasks/create_eb_app_ver')().catch(err => console.log(err.stack))\"",
+    "create-eb-environment": "babel-node --eval \"require('./tasks/create_eb_env')().catch(err => console.log(err.stack))\"",
+    "provision-task2": "babel-node --eval \"require('./tasks/provision_task2')().catch(err => console.log(err.stack))\""
+  },
+  "author": "Juan Manuel Mesa",
+  "license": "ISC",
+  "dependencies": {
+    "archiver": "^0.15.1",
+    "async": "^1.4.2",
+    "aws-sdk": "^2.2.2",
+    "babel": "^5.8.23",
+    "git-cli": "^0.8.3",
+    "node-csv": "^0.1.2",
+    "sleep": "^3.0.0",
+    "underscore": "^1.8.3"
+  },
+  "devDependencies": {
+    "babel-core": "^5.8.24",
+    "babel-loader": "^5.3.2"
+  }
+}
