@@ -9,7 +9,10 @@ export default () => new Promise((resolve, reject) => {
   const s3 = new S3();
   
   let params = {
-    Bucket: settings.winfilesBucket
+    Bucket: settings.winfilesBucket,
+    CreateBucketConfiguration: {
+      LocationConstraint: "us-west-2"
+    }
   };
 
   // Create Bucket
@@ -34,7 +37,6 @@ export default () => new Promise((resolve, reject) => {
           });
         });
       });
-      console.log(data);
       resolve(data);
     }
   });

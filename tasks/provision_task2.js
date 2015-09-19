@@ -30,9 +30,9 @@ export default async () => {
   console.log("Please go to: ");
   console.log(`https://${environment.CNAME}/install2/`);
   console.log("Use the following information to complete the app configuration");
-  console.log(`Database: ${dbName}`);
-  console.log(`Username: ${dbUser}`);
-  console.log(`Database Password: ${dbPasword}`);
+  console.log(`Database: ${settings.dbName}`);
+  console.log(`Username: ${settings.dbUser}`);
+  console.log(`Database Password: ${settings.dbPasword}`);
   console.log(`Database host: ${endpoint.DBInstances[0].Endpoint.Address}`);
 }
 

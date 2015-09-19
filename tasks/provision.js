@@ -6,10 +6,10 @@ import checkStatus from './check_status';
 
 export default async () => {
   let locTemplates = await uploadTemplates();
-  uploadWinfiles();
+  let winfiles = await uploadWinfiles();
   let stack = await createStack(locTemplates.Location);
 
-  // Is not working
-  // await checkStatus(stack.StackId);
+  let status = await checkStatus(stack.StackId);
+  console.log(status);
 
 }
